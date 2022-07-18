@@ -1,5 +1,6 @@
 
 
+import 'package:chat/model/firebase_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -76,13 +77,20 @@ class LogControllerState extends State<LogController>{
       if(_password !=null){
         if(_log){
           //Connexion
+          FirebaseHelper().handleSignIn(_adresseMail!, _password!).then((user){
+            print(user?.uid);
+          }).catchError((error){
+            alerte(error.toString());
+          });
         }else{
-
-
           //Création connexion
           if(_prenom!=null){
             if(_nom!=null){
-
+              FirebaseHelper().create(_adresseMail!, _password!, _prenom!, _nom!).then((user){
+                print(user?.uid);
+              }).catchError((error){
+                alerte(error.toString());
+              });
             }else{
               //Alerte Pas de nom
               alerte("Aucun nom n'a été renseignée");
